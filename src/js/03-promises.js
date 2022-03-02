@@ -14,40 +14,39 @@ function onFormSubmit(e){
   let position = 1;
 const mas = [];  
   mas.push({position: position, delay: delay});  
-
   for(let i = 2; i <= amount; i +=1){
     delay += step;
     position = i;
-    // delay[0] = delay;
     mas.push({position: position, delay: delay});
   }
-  console.log(mas);
-  // const promises = mas.map(createPromise);
-  const promises = mas.map(elem => createPromise(elem.position, elem.delay));
 
+  runPromises(mas);
+}
 
-  console.log(promises);
+function createPromise(position, delay) {
+  return new Promise((resolve, reject) =>{
+    const shouldResolve = Math.random() > 0.3;
+    setTimeout(() =>{
+      if (shouldResolve) {
+        resolve({position, delay});
+      } else {
+        reject({position, delay});
+      }
+    },delay)                                                      
+  }); 
+}
 
-  function createPromise(position, delay) {
-    return new Promise((resolve, reject) =>{
-      const shouldResolve = Math.random() > 0.3;
-      setTimeout(() =>{
-        if (shouldResolve) {
-          resolve({position, delay});
-        } else {
-          reject({position, delay});
-        }
-      },delay)                                                      
-    }); 
-  }
+function runPromises(mas){
+  for(let i=0; i <= mas.length; i+=1){
+  let position = mas[i].position;
+  let delay = mas[i].delay;
 
-  
-  // createPromise(position, delay)
-  Promise.all(promises)
+    createPromise(position, delay)
   .then(({position, delay}) => {
     Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay} ms`);
   })
   .catch(({position, delay}) => {
     Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay} ms`);
   });
+  }
 }

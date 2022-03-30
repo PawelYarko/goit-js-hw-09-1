@@ -37,7 +37,7 @@ function createPromise(position, delay) {
 }
 
 function runPromises(mas){
-  for(let i=0; i <= mas.length; i+=1){
+  for(let i=0; i < mas.length; i+=1){
   let position = mas[i].position;
   let delay = mas[i].delay;
 
